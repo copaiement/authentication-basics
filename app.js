@@ -4,12 +4,13 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
+require('dotenv').config();
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // DB Functions
 
-const mongoDB = 'mongodb+srv://authAdmin:NtIRtCYboiaAAjJP@cluster0.r0voux5.mongodb.net/authentication-basics?retryWrites=true&w=majority';
+const mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongo connection error'));
@@ -60,7 +61,7 @@ app.set('views', __dirname);
 app.set('view engine', 'ejs');
 
 // change this session secret later to be hidden
-app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
+app.use(session({ secret: process.env.SECRET_KEY, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
